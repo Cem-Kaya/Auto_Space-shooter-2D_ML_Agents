@@ -21,8 +21,7 @@ public class MyScript : MonoBehaviour
     public bool _isShieldActive = false;
     public GameObject shieldvisualizer;
     private int _score = 0;
-    public TextMeshProUGUI text;
-    public UI_Manager _uimanager;
+   
     public GameManager _gameManager;
     public GameObject _leftEngine, _rightEngine;
     public bool left_thrust = false;
@@ -35,7 +34,7 @@ public class MyScript : MonoBehaviour
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
-        _uimanager = GameObject.Find("Canvas").GetComponent<UI_Manager>();
+
         _audioSource = GetComponent<AudioSource>();
        
         if (_spawnManager == null)
@@ -142,8 +141,6 @@ public class MyScript : MonoBehaviour
         {
             _rightEngine.SetActive(true);
         }
-        _uimanager.SetImageAtIndex(_lives);
-        _uimanager.UpdateLives(_lives);
         
         if (_lives < 1)
         {   
@@ -188,7 +185,6 @@ public class MyScript : MonoBehaviour
     public void AddScore(int points)
     {
         _score += points;
-        text.text = "score: " + _score.ToString() ;
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
