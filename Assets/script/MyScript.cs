@@ -32,7 +32,7 @@ public class MyScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(0, 0, 0);
+        transform.localPosition = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
         _audioSource = GetComponent<AudioSource>();
@@ -64,6 +64,7 @@ public class MyScript : MonoBehaviour
             
       
     }
+
     void CalculateMovement()
     {
         float horizontaLInput = Input.GetAxis("Horizontal");
@@ -81,28 +82,29 @@ public class MyScript : MonoBehaviour
         // else speed boost multiplier 
         transform.Translate(direction * _speed * Time.deltaTime);
          
-      if (transform.position.y >= 0)
+      if (transform.localPosition.y >= 0)
       {
-        transform.position = new Vector3(transform.position.x, 0, 0);
+        transform.localPosition = new Vector3(transform.localPosition.x, 0, 0);
       }
-        else if (transform.position.y <= -3.8f)
+        else if (transform.localPosition.y <= -3.8f)
         {
-            transform.position = new Vector3(transform.position.x, -3.8f, 0);
+            transform.localPosition = new Vector3(transform.localPosition.x, -3.8f, 0);
         }
         //if player on the x > 11
         //x po = 11
         //else if player on the x is less then -11
         //x pos = 11
 
-        if (transform.position.x > 8.3f)
+        if (transform.localPosition.x > 8.3f)
         {
-            transform.position = new Vector3(-8.3f, transform.position.y, 0);
+            transform.localPosition = new Vector3(-8.3f, transform.localPosition.y, 0);
         }
-        else if (transform.position.x < -8.3f)
+        else if (transform.localPosition.x < -8.3f)
         {
-            transform.position = new Vector3(8.3f, transform.position.y, 0);
+            transform.localPosition = new Vector3(8.3f, transform.localPosition.y, 0);
         }
     }
+
     void FireLaser()
     {
         //  if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canfire)
