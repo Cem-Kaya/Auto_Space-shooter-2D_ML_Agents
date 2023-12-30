@@ -16,9 +16,12 @@ public class Enemy : MonoBehaviour
     public bool _stop = false;
     // Start is called before the first frame update
 
-    
+    Vector3 start_pos;
     void Start()
     {
+        start_pos = transform.position;
+
+
         StartCoroutine(Laser());
         _player = transform.parent.parent.Find("Agent"). GetComponent<MyScript> ();
         _audioSource = GetComponent<AudioSource> ();
@@ -40,6 +43,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
     }
+
     private void FixedUpdate()
     {
         CalculateMovement();
@@ -48,10 +52,9 @@ public class Enemy : MonoBehaviour
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-        if (transform.position.y < -6f)
+        if (transform.position.y < start_pos .y- 14)
         {
-            float randomx = Random.Range(-7f, 7f);
-            transform.position = new Vector3(randomx, 7, 0);
+            transform.position = new Vector3(start_pos.x, start_pos.y, 0);
         }
     }
     private void OnTriggerEnter2D(Collider2D other)

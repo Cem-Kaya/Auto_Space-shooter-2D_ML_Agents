@@ -14,19 +14,19 @@ public class Powerup : MonoBehaviour
     // 2 = Shields
 
     public int powerupID;
-
+    Vector3 start_pos;
     // Start is called before the first frame update
     void Start()
     {
-
+        start_pos = transform.position;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-        if (transform.position.y < -4.5f)
+        if (transform.position.y < start_pos.y - 15f)
         {
             Destroy(this.gameObject);
         }

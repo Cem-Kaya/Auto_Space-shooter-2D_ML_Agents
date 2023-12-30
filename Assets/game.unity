@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &376257335
+--- !u!1001 &570023222
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -135,6 +135,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2399235961944605247, guid: 4498e3b9e5df2b444b857412d394e018,
+        type: 3}
+      propertyPath: _lives
+      value: 9999999
       objectReference: {fileID: 0}
     - target: {fileID: 3144816333141275029, guid: 4498e3b9e5df2b444b857412d394e018,
         type: 3}
@@ -164,12 +169,12 @@ PrefabInstance:
     - target: {fileID: 6979636494247191533, guid: 4498e3b9e5df2b444b857412d394e018,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.54
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 6979636494247191533, guid: 4498e3b9e5df2b444b857412d394e018,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.7109627
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 6979636494247191533, guid: 4498e3b9e5df2b444b857412d394e018,
         type: 3}
@@ -328,6 +333,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2399235961944605247, guid: 4498e3b9e5df2b444b857412d394e018,
+        type: 3}
+      propertyPath: _lives
+      value: 9999999
+      objectReference: {fileID: 0}
     - target: {fileID: 3144816333141275029, guid: 4498e3b9e5df2b444b857412d394e018,
         type: 3}
       propertyPath: m_Name
@@ -356,12 +366,12 @@ PrefabInstance:
     - target: {fileID: 6979636494247191533, guid: 4498e3b9e5df2b444b857412d394e018,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.7095531
+      value: -26.59
       objectReference: {fileID: 0}
     - target: {fileID: 6979636494247191533, guid: 4498e3b9e5df2b444b857412d394e018,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.7109627
+      value: -14.79
       objectReference: {fileID: 0}
     - target: {fileID: 6979636494247191533, guid: 4498e3b9e5df2b444b857412d394e018,
         type: 3}

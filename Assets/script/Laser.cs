@@ -9,19 +9,21 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private float _speed = 8.0f;
     // Start is called before the first frame update
+    float startt_y = 0;
     void Start()
     {
-        
+        startt_y = transform.position.y;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // translate laser up
         transform.Translate(_speed * Time.deltaTime * Vector3.up);
         // if laser position is greater than 8 y
         // destroy the object
-        if (transform.position.y > 8f)
+        // Debug.Log(transform.localPosition.y); not spawned in the parent 
+        if (transform.localPosition.y > 8f+ startt_y)
         {
             // check if this  object has a parent
             // destroy parent too
