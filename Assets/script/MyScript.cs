@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
 using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class MyScript : MonoBehaviour
+public class MyScript : Agent
 {
     [SerializeField]    
     private float _speed = 8f;
     public float _speedMultiplier = 2f;    
     [SerializeField] private GameObject _laserPrefab;
     public GameObject _tripleShotPrefab;
-    public float _fireRate = 0.05f;
+    public float _fireRate = 0.2f;
     public float _canfire = -1f;
     public int _lives = 3;
     public SpawnManager _spawnManager;
@@ -53,22 +56,27 @@ public class MyScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         CalculateMovement();
 
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canfire)
+        /* if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canfire)
         {
             FireLaser();
         }
-            
-      
+        */
+
+
     }
 
+
+    private float horizontaL_ml_Input; 
+    private float verticaL_ml_Input;
     void CalculateMovement()
     {
-        float horizontaLInput = Input.GetAxis("Horizontal");
-        float verticaLInput = Input.GetAxis("Vertical");
+        float horizontaLInput = horizontaL_ml_Input; //Input.GetAxis("Horizontal");
+        float verticaLInput = verticaL_ml_Input;  // Input.GetAxis("Vertical");
+
         // transform.Translate(Vector3.left * horizontalInput * Time.deltaTime * _speed);
         // transform.Translate(Vector3.up * verticalInput * Time.deltaTime * _speed);
         //  transform.Translate(new Vector3(horizontalInput, verticalInput, 0) * _speed * Time.deltaTime);
@@ -132,9 +140,9 @@ public class MyScript : MonoBehaviour
         }
 
         _lives--;
-        
+        AddReward(-50);
 
-        if(_lives == 2)
+        if (_lives == 2)
         {
             _leftEngine.SetActive(true);
             
@@ -148,13 +156,18 @@ public class MyScript : MonoBehaviour
         {   
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
+            EndEpisode();
         }
-       
+
+
+
+
     }
 
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
+        AddReward(150);
         StartCoroutine(TripleShotPowerDownRoutine());
     }
    
@@ -167,6 +180,7 @@ public class MyScript : MonoBehaviour
     public void SpeedBoostActive()
     {
         _isSpeedBoostActive = true;
+        AddReward(150);
         _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
@@ -181,11 +195,14 @@ public class MyScript : MonoBehaviour
     public void ShieldsActive()
     {
         _isShieldActive = true;
+        AddReward(150);
         shieldvisualizer.SetActive(true);
     }
     
     public void AddScore(int points)
     {
+        AddReward(100);
+        //Debug.Log("got score" +_score  );  
         _score += points;
     }
 
@@ -200,4 +217,54 @@ public class MyScript : MonoBehaviour
         //Debug.Log("Collider is working EL");
 
     }
+
+    public override void Initialize()
+    {
+    }
+
+
+
+    public override void OnEpisodeBegin()
+    {
+        // reset scene 
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        /// i think camera works automatically
+    }
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        int vertical = Mathf.RoundToInt(Input.GetAxisRaw("Vertical"));
+        int horizontal = Mathf.RoundToInt(Input.GetAxisRaw("Horizontal"));
+        bool shoot = Input.GetKey(KeyCode.Space);
+
+        // Convert the actions to Discrete choices (0, 1, 2)
+        ActionSegment<int> actions = actionsOut.DiscreteActions;
+        actions[0] = vertical >= 0 ? vertical : 2;
+        actions[1] = horizontal >= 0 ? horizontal : 2;
+        actions[2] = shoot ? 1 : 0;
+
+    }
+
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        verticaL_ml_Input  = actions.DiscreteActions[0] <= 1 ? actions.DiscreteActions[0] : -1;
+        horizontaL_ml_Input = actions.DiscreteActions[1] <= 1 ? actions.DiscreteActions[1] : -1;
+        bool shoot = actions.DiscreteActions[2] > 0;
+
+
+         if (shoot  && Time.time > _canfire)
+         {
+            FireLaser();
+         }
+        
+
+
+        //Debug.Log(actions.ContinuousActions[0]);
+        //Debug.Log("act 1 : " + actions.DiscreteActions[0] + "act 2 :" + actions.DiscreteActions[1]);
+    }
+
+
+
+
 }

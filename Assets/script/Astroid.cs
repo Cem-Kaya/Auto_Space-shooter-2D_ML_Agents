@@ -21,7 +21,7 @@ public class Astroid : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         transform.Rotate(Vector3.forward*_rotateSpeed*Time.deltaTime);
        

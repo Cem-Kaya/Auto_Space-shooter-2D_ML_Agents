@@ -26,14 +26,23 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnEnemyRoutine()
     {
         // add random delay before spawning
-        yield return new WaitForSeconds(3.0f + Random.Range(-1.2f,2.1f));
+        yield return new WaitForSeconds(6.0f );
         while (_stopspawning == false)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f,8f), 7, 0);
             GameObject newEnemy =  Instantiate(_enemyPrefab,transform.position+ posToSpawn, Quaternion.identity,transform);
-            //newEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(5.0f);
-           // yield return null;
+            // Calculate the number of fixed updates for 3 seconds and 8 seconds
+        int minFixedUpdates = Mathf.CeilToInt(3f / 0.02f);
+        int maxFixedUpdates = Mathf.CeilToInt(8f / 0.02f);
+
+        // Generate a random number of fixed updates to wait
+        int randomFixedUpdates = Random.Range(minFixedUpdates, maxFixedUpdates + 1);
+
+        // Wait for the calculated number of fixed updates
+        for (int i = 0; i < randomFixedUpdates; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
         }
     }
 
@@ -46,7 +55,20 @@ public class SpawnManager : MonoBehaviour
 
             int randomPowerUp = Random.Range(0, 3);
             Instantiate(powerups[randomPowerUp], transform.position + posToSpawn, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(3, 8)  );
+
+
+            // Calculate the number of fixed updates for 3 seconds and 8 seconds
+            int minFixedUpdates = Mathf.CeilToInt(4f / 0.02f);
+            int maxFixedUpdates = Mathf.CeilToInt(8f / 0.02f);
+
+            // Generate a random number of fixed updates to wait
+            int randomFixedUpdates = Random.Range(minFixedUpdates, maxFixedUpdates + 1);
+
+            // Wait for the calculated number of fixed updates
+            for (int i = 0; i < randomFixedUpdates; i++)
+            {
+                yield return new WaitForFixedUpdate(); // WaitForSeconds(Random.Range(4, 8)  ); 
+            }
         }    
     }
 
