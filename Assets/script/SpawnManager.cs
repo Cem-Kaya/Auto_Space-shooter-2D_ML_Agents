@@ -9,7 +9,7 @@ public class SpawnManager : MonoBehaviour
     private bool _stopspawning = false;
     public GameObject[] powerups; 
 
-    
+    public List<GameObject> all_spawned = new List<GameObject>();
 
     public void StartSpawning()
     {
@@ -31,9 +31,13 @@ public class SpawnManager : MonoBehaviour
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f,8f), 7, 0);
             GameObject newEnemy =  Instantiate(_enemyPrefab,transform.position+ posToSpawn, Quaternion.identity,transform);
+
+
+            all_spawned.Add(newEnemy);
+
             // Calculate the number of fixed updates for 3 seconds and 8 seconds
-        int minFixedUpdates = Mathf.CeilToInt(3f / 0.02f);
-        int maxFixedUpdates = Mathf.CeilToInt(8f / 0.02f);
+            int minFixedUpdates = Mathf.CeilToInt(3f / 0.02f);
+            int maxFixedUpdates = Mathf.CeilToInt(8f / 0.02f);
 
         // Generate a random number of fixed updates to wait
         int randomFixedUpdates = Random.Range(minFixedUpdates, maxFixedUpdates + 1);
@@ -54,7 +58,9 @@ public class SpawnManager : MonoBehaviour
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
 
             int randomPowerUp = Random.Range(0, 3);
-            Instantiate(powerups[randomPowerUp], transform.position + posToSpawn, Quaternion.identity);
+            GameObject new_powerUp =  Instantiate(powerups[randomPowerUp], transform.position + posToSpawn, Quaternion.identity);
+
+            all_spawned.Add(new_powerUp);
 
 
             // Calculate the number of fixed updates for 3 seconds and 8 seconds
@@ -75,5 +81,21 @@ public class SpawnManager : MonoBehaviour
     public void OnPlayerDeath()
     {
         _stopspawning= true;
-    }  
+    }
+
+    public void OnPlayerRebirth()
+    {
+        _stopspawning = false;
+    }
+
+    public void DestroyAll()
+    {
+        foreach (GameObject obj in all_spawned)
+        {
+            Destroy(obj);
+        }
+        // reset list 
+        all_spawned = new List<GameObject>();
+    }
+
 }

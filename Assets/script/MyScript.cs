@@ -155,7 +155,7 @@ public class MyScript : Agent
         if (_lives < 1)
         {   
             _spawnManager.OnPlayerDeath();
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
             EndEpisode();
         }
 
@@ -180,7 +180,7 @@ public class MyScript : Agent
     public void SpeedBoostActive()
     {
         _isSpeedBoostActive = true;
-        AddReward(150);
+        AddReward(20);
         _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
@@ -195,7 +195,7 @@ public class MyScript : Agent
     public void ShieldsActive()
     {
         _isShieldActive = true;
-        AddReward(150);
+        AddReward(30);
         shieldvisualizer.SetActive(true);
     }
     
@@ -227,6 +227,11 @@ public class MyScript : Agent
     public override void OnEpisodeBegin()
     {
         // reset scene 
+        //destroy all enemy
+        _spawnManager.DestroyAll();
+        _spawnManager.OnPlayerRebirth();
+
+
     }
     public override void CollectObservations(VectorSensor sensor)
     {
