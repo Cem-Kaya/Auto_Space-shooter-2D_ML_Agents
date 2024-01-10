@@ -36,7 +36,7 @@ public class MyScript : Agent
     void Start()
     {
         transform.localPosition = new Vector3(0, 0, 0);
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _spawnManager = transform.parent.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
         _audioSource = GetComponent<AudioSource>();
        
@@ -86,17 +86,19 @@ public class MyScript : Agent
         // else if  position  on the y is less then  -3.8f
         // y position  = -3.8f
         Vector3 direction = new Vector3(horizontaLInput, verticaLInput, 0);
-       
+
         // else speed boost multiplier 
         transform.Translate(direction * _speed * Time.deltaTime);
-         
-      if (transform.localPosition.y >= 0)
-      {
-        transform.localPosition = new Vector3(transform.localPosition.x, 0, 0);
-      }
+
+        if (transform.localPosition.y >= 0)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, 0, 0);
+            AddReward(-25);
+        }
         else if (transform.localPosition.y <= -3.8f)
         {
             transform.localPosition = new Vector3(transform.localPosition.x, -3.8f, 0);
+            AddReward(-25);
         }
         //if player on the x > 11
         //x po = 11
@@ -106,12 +108,15 @@ public class MyScript : Agent
         if (transform.localPosition.x > 8.3f)
         {
             transform.localPosition = new Vector3(-8.3f, transform.localPosition.y, 0);
+            AddReward(-25);
         }
         else if (transform.localPosition.x < -8.3f)
         {
             transform.localPosition = new Vector3(8.3f, transform.localPosition.y, 0);
+            AddReward(-25);
         }
     }
+
 
     void FireLaser()
     {
@@ -125,6 +130,7 @@ public class MyScript : Agent
         else
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.09f, 0), Quaternion.identity);
+            AddReward(-15);
         }
         _audioSource.Play();
     }
@@ -140,7 +146,7 @@ public class MyScript : Agent
         }
 
         _lives--;
-        AddReward(-50);
+        AddReward(-75);
 
         if (_lives == 2)
         {
@@ -157,6 +163,7 @@ public class MyScript : Agent
             _spawnManager.OnPlayerDeath();
             //Destroy(this.gameObject);
             EndEpisode();
+            _lives = 100;
         }
 
 
@@ -167,7 +174,7 @@ public class MyScript : Agent
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
-        AddReward(150);
+        AddReward(100);
         StartCoroutine(TripleShotPowerDownRoutine());
     }
    
@@ -180,7 +187,7 @@ public class MyScript : Agent
     public void SpeedBoostActive()
     {
         _isSpeedBoostActive = true;
-        AddReward(20);
+        AddReward(50);
         _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
@@ -195,7 +202,7 @@ public class MyScript : Agent
     public void ShieldsActive()
     {
         _isShieldActive = true;
-        AddReward(30);
+        AddReward(50);
         shieldvisualizer.SetActive(true);
     }
     
