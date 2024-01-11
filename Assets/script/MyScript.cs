@@ -70,6 +70,7 @@ public class MyScript : Agent
     }
 
 
+    private float cost_off_tp = -40 ; 
     private float horizontaL_ml_Input; 
     private float verticaL_ml_Input;
     void CalculateMovement()
@@ -93,12 +94,12 @@ public class MyScript : Agent
         if (transform.localPosition.y >= 0)
         {
             transform.localPosition = new Vector3(transform.localPosition.x, 0, 0);
-            AddReward(-25);
+            AddReward(cost_off_tp);
         }
         else if (transform.localPosition.y <= -3.8f)
         {
             transform.localPosition = new Vector3(transform.localPosition.x, -3.8f, 0);
-            AddReward(-25);
+            AddReward(cost_off_tp);
         }
         //if player on the x > 11
         //x po = 11
@@ -108,12 +109,12 @@ public class MyScript : Agent
         if (transform.localPosition.x > 8.3f)
         {
             transform.localPosition = new Vector3(-8.3f, transform.localPosition.y, 0);
-            AddReward(-25);
+            AddReward(cost_off_tp);
         }
         else if (transform.localPosition.x < -8.3f)
         {
             transform.localPosition = new Vector3(8.3f, transform.localPosition.y, 0);
-            AddReward(-25);
+            AddReward(cost_off_tp);
         }
     }
 
@@ -130,7 +131,7 @@ public class MyScript : Agent
         else
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.09f, 0), Quaternion.identity);
-            AddReward(-15);
+            AddReward(-20);
         }
         _audioSource.Play();
     }
@@ -208,7 +209,7 @@ public class MyScript : Agent
     
     public void AddScore(int points)
     {
-        AddReward(100);
+        AddReward(175);
         //Debug.Log("got score" +_score  );  
         _score += points;
     }
@@ -219,9 +220,15 @@ public class MyScript : Agent
         if (collision.gameObject.tag == "Enemylaser" )
         {
             //Debug.Log("Collider is working EL");
-            Damage();
+            Damage(); // Enemy(Clone)
         }
-        //Debug.Log("Collider is working EL");
+        if (collision.gameObject.tag == "Enemy")
+        {
+            //Debug.Log("Collider is working EL");
+            Damage(); // Enemy(Clone)
+            AddReward(-250);
+            //Debug.Log("Enemy crash hit");
+        } 
 
     }
 
